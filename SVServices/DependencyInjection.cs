@@ -18,6 +18,8 @@ namespace SVServices
             services.AddTransient<IMedidaService, MedidaService>();
             services.AddTransient<ICategoriaService, CategoriaService>();
             services.AddTransient<IProductoService, ProductoService>();
+            services.AddTransient<INegocioService, NegocioService>();
+            services.AddTransient<ICloudunaryService, CloudunaryService>();
         }
     }
 }
