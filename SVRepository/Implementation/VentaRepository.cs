@@ -19,6 +19,43 @@ namespace SVRepository.Implementation
         {
             _conexion = conexion;
         }
+
+        public async Task<List<Venta>> Lista(string fechaInicio, string fechaFin, string buscar = "")
+        {
+            List<Venta> lista = new List<Venta>();
+
+            using (var con = _conexion.GetConnection())
+            {
+                con.Open();
+                var cmd = new SqlCommand("sp_listaVenta", con);
+                cmd.Parameters.AddWithValue("@FechaInicio", fechaInicio);
+                cmd.Parameters.AddWithValue("@FechaFin", fechaFin);
+                cmd.Parameters.AddWithValue("@Buscar", buscar);
+                cmd.CommandType = CommandType.StoredProcedure;
+
+                using (var dr = await cmd.ExecuteReaderAsync())
+                {
+                    while (await dr.ReadAsync())
+                    {
+                        lista.Add(new Venta
+                        {
+                            NumeroVenta = dr["NumeroVenta"].ToString(),
+                            UsuarioRegistro = new Usuario
+                            {
+                                NombreUsuario = dr["NombreUsuario"].ToString(),
+                            },
+                            NombreCliente = dr["NombreCliente"].ToString(),
+                            PrecioTotal = Convert.ToDecimal(dr["PrecioTotal"]),
+                            PagoCon = Convert.ToDecimal(dr["PagoCon"]),
+                            Cambio = Convert.ToDecimal(dr["Cambio"]),
+                            FechaRegistro = dr["FechaRegistro"].ToString(),
+                        });
+                    }
+                }
+            }
+            return lista;
+        }
+
         public async Task<Venta> Obtener(string numeroVenta)
         {
             Venta objeto = new Venta();

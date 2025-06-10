@@ -16,6 +16,12 @@ namespace SVServices.Implementation
         {
             _ventaRepository = ventaRepository;
         }
+
+        public async Task<List<Venta>> Lista(string fechaInicio, string fechaFin, string buscar = "")
+        {
+            return await _ventaRepository.Lista(fechaInicio, fechaFin, buscar);
+        }
+
         public async Task<Venta> Obtener(string numeroVenta)
         {
             return await _ventaRepository.Obtener(numeroVenta);
