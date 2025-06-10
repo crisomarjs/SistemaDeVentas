@@ -1,0 +1,16 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using SVRepository.Entities;
+
+namespace SVServices.Interfaces
+{
+    public interface IVentaService
+    {
+        Task<string> Registrar(string ventaXml);
+        Task<Venta> Obtener(string numeroVenta);
+        Task<List<DetalleVenta>> ObtenerDetalle(string numeroVenta);
+    }
+}

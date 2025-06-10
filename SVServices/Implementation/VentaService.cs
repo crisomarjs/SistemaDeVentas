@@ -1,0 +1,34 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using SVRepository.Entities;
+using SVRepository.Intefaces;
+using SVServices.Interfaces;
+
+namespace SVServices.Implementation
+{
+    public class VentaService : IVentaService
+    {
+        private readonly IVentaRepository _ventaRepository;
+        public VentaService(IVentaRepository ventaRepository)
+        {
+            _ventaRepository = ventaRepository;
+        }
+        public async Task<Venta> Obtener(string numeroVenta)
+        {
+            return await _ventaRepository.Obtener(numeroVenta);
+        }
+
+        public async Task<List<DetalleVenta>> ObtenerDetalle(string numeroVenta)
+        {
+            return await _ventaRepository.ObtenerDetalle(numeroVenta);
+        }
+
+        public async Task<string> Registrar(string ventaXml)
+        {
+            return await _ventaRepository.Registrar(ventaXml);
+        }
+    }
+}

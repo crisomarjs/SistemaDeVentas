@@ -28,6 +28,10 @@ namespace SVServices.Implementation
             return await _productoRepository.Editar(objeto);
         }
 
-        
+        public async Task<Producto> Obtener(string codigo)
+        {
+            
+            return await _productoRepository.Obtener(codigo);
+        }
     }
 }
