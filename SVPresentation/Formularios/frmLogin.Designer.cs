@@ -49,7 +49,7 @@
             label1.Name = "label1";
             label1.Size = new Size(270, 307);
             label1.TabIndex = 0;
-            label1.Text = "Demo Sistema de Ventas";
+            label1.Text = "Sistema de Ventas";
             label1.TextAlign = ContentAlignment.MiddleCenter;
             // 
             // label2

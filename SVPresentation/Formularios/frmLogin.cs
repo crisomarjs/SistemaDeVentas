@@ -71,8 +71,7 @@ namespace SVPresentation.Formularios
                 UsuarioSesion.IdRol = encontrado.RefRol.IdRol;
                 UsuarioSesion.Rol = encontrado.RefRol.Nombre;
 
-                //TODO: Cambiar formulario layout
-                var _formLayout = _serviceProvider.GetRequiredService<frmCategoria>();
+                var _formLayout = _serviceProvider.GetRequiredService<Layout>();
                 this.Hide();
                 txbUsuario.Text = "";
                 txbContrasena.Text = "";

@@ -52,6 +52,7 @@ namespace SVPresentation
                     services.AddTransient<frmReporteVenta>();
                     services.AddTransient<frmLogin>();
                     services.AddTransient<frmActualizarClave>();
+                    services.AddTransient<Layout>();
                 });
     }
 }

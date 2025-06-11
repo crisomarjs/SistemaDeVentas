@@ -23,6 +23,7 @@ namespace SVRepository
             services.AddTransient<IRolRepository, RolRepository>();
             services.AddTransient<IUsuarioRepository, UsuarioRepository>();
             services.AddTransient<IVentaRepository, VentaRepository>();
+            services.AddTransient<IMenuRolRepository, MenuRolRepository>();
         }
     }
 }

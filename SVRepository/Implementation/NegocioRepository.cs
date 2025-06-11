@@ -29,7 +29,7 @@ namespace SVRepository.Implementation
                 cmd.Parameters.AddWithValue("@RUC", negocio.RUC);
                 cmd.Parameters.AddWithValue("@Direccion", negocio.Direccion);
                 cmd.Parameters.AddWithValue("@Celular", negocio.Celular);
-                cmd.Parameters.AddWithValue("@Correo", negocio.Celular);
+                cmd.Parameters.AddWithValue("@Correo", negocio.Correo);
                 cmd.Parameters.AddWithValue("@SimboloMoneda", negocio.SimboloMoneda);
                 cmd.Parameters.AddWithValue("@NombreLogo", negocio.NombreLogo);
                 cmd.Parameters.AddWithValue("@UrlLogo", negocio.UrlLogo);
