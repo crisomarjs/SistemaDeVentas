@@ -36,5 +36,10 @@ namespace SVServices.Implementation
         {
             return await _ventaRepository.Registrar(ventaXml);
         }
+
+        public async Task<List<DetalleVenta>> Reporte(string fechaInicio, string fechaFin)
+        {
+            return await _ventaRepository.Reporte(fechaInicio, fechaFin);
+        }
     }
 }

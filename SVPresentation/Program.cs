@@ -24,7 +24,7 @@ namespace SVPresentation
             ApplicationConfiguration.Initialize();
             var host = CreateHostBuilder().Build();
 
-            var formService = host.Services.GetRequiredService<frmHistorial>();
+            var formService = host.Services.GetRequiredService<frmReporteVenta>();
 
             Application.Run(formService);
         }
@@ -49,6 +49,7 @@ namespace SVPresentation
                     services.AddTransient<frmBuscarProducto>();
                     services.AddTransient<frmHistorial>();
                     services.AddTransient<frmDetalleVenta>();
+                    services.AddTransient<frmReporteVenta>();
                 });
     }
 }

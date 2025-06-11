@@ -153,5 +153,47 @@ namespace SVRepository.Implementation
             }
             return respuesta;
         }
+
+        public async Task<List<DetalleVenta>> Reporte(string fechaInicio, string fechaFin)
+        {
+            List<DetalleVenta> lista = new List<DetalleVenta>();
+
+            using (var con = _conexion.GetConnection())
+            {
+                con.Open();
+                var cmd = new SqlCommand("sp_reporteVenta", con);
+                cmd.Parameters.AddWithValue("@FechaInicio", fechaInicio);
+                cmd.Parameters.AddWithValue("@FechaFin", fechaFin);
+                cmd.CommandType = CommandType.StoredProcedure;
+
+                using (var dr = await cmd.ExecuteReaderAsync())
+                {
+                    while (await dr.ReadAsync())
+                    {
+                        lista.Add(new DetalleVenta
+                        {
+                            RefVenta = new Venta
+                            {
+                                NumeroVenta = dr["NumeroVenta"].ToString(),
+                                UsuarioRegistro = new Usuario
+                                {
+                                    NombreUsuario = dr["NombreUsuario"].ToString(),
+                                },
+                                FechaRegistro = dr["FechaRegistro"].ToString(),
+                            },
+                            RefProducto =new Producto
+                            {
+                                Descripcion = dr["Producto"].ToString(),
+                                PrecioCompra = Convert.ToDecimal(dr["PrecioCompra"]),
+                            },
+                            PrecioVenta = Convert.ToDecimal(dr["PrecioVenta"]),
+                            Cantidad = Convert.ToInt32(dr["Cantidad"]),
+                            PrecioTotal = Convert.ToDecimal(dr["PrecioTotal"]),
+                        });
+                    }
+                }
+            }
+            return lista;
+        }
     }
 }
