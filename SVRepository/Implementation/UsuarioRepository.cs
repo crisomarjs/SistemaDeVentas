@@ -8,6 +8,7 @@ using Microsoft.Data.SqlClient;
 using SVRepository.DB;
 using SVRepository.Entities;
 using SVRepository.Intefaces;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace SVRepository.Implementation
 {
@@ -18,6 +19,30 @@ namespace SVRepository.Implementation
         {
             _conexion = conexion;
         }
+
+        public async Task ActualizarClave(int idUsuario, string nuevaClave, int resetear)
+        {
+
+            using (var con = _conexion.GetConnection())
+            {
+                con.Open();
+                var cmd = new SqlCommand("sp_actualizarClave", con);
+                cmd.Parameters.AddWithValue("@IdUsuario", idUsuario);
+                cmd.Parameters.AddWithValue("@NuevaClave", nuevaClave);
+                cmd.Parameters.AddWithValue("@Resetear", resetear);
+                cmd.CommandType = CommandType.StoredProcedure;
+
+                try
+                {
+                    await cmd.ExecuteNonQueryAsync();
+                }
+                catch
+                {
+                    throw;
+                }
+            }
+        }
+
         public async Task<string> Crear(Usuario objeto)
         {
             string respuesta = "";
@@ -109,6 +134,67 @@ namespace SVRepository.Implementation
                 }
             }
             return lista;
+        }
+
+        public async Task<Usuario> Login(string usuario, string clave)
+        {
+            Usuario objeto = new Usuario();
+
+            using (var con = _conexion.GetConnection())
+            {
+                con.Open();
+                var cmd = new SqlCommand("sp_login", con);
+                cmd.Parameters.AddWithValue("@NombreUsuario", usuario);
+                cmd.Parameters.AddWithValue("@Clave", clave);
+                cmd.CommandType = CommandType.StoredProcedure;
+
+                using (var dr = await cmd.ExecuteReaderAsync())
+                {
+                    while (await dr.ReadAsync())
+                    {
+                        objeto = new Usuario()
+                        {
+                            IdUsuario = Convert.ToInt32(dr["IdUsuario"]),
+                            NombreCompleto = dr["NombreCompleto"].ToString(),
+                            RefRol = new Rol
+                            {
+                                IdRol = Convert.ToInt32(dr["IdRol"]),
+                                Nombre = dr["NombreRol"].ToString()
+                            },
+                            Correo = dr["Correo"].ToString(),
+                            NombreUsuario = dr["NombreUsuario"].ToString(),
+                            ResetearClave = Convert.ToInt32(dr["ResetearClave"]),
+                            Activo = Convert.ToInt32(dr["Activo"])
+                        };
+                    }
+                }
+            }
+            return objeto;
+        }
+
+        public async Task<int> VerificarCorreo(string correo)
+        {
+            int idUsuario;
+
+            using (var con = _conexion.GetConnection())
+            {
+                con.Open();
+                var cmd = new SqlCommand("sp_varificarCorreo", con);
+                cmd.Parameters.AddWithValue("@Correo", correo);
+                cmd.Parameters.Add("@IdUsuario", SqlDbType.Int).Direction = ParameterDirection.Output;
+                cmd.CommandType = CommandType.StoredProcedure;
+
+                try
+                {
+                    await cmd.ExecuteNonQueryAsync();
+                    idUsuario = Convert.ToInt32(cmd.Parameters["@IdUsuario"].Value)!;
+                }
+                catch
+                {
+                    idUsuario = 0;
+                }
+            }
+            return idUsuario;
         }
     }
 }
